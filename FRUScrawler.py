@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[382]:
-
-
 ### Dependencies
 
 import os
@@ -12,10 +6,6 @@ import re
 from lxml import html
 from urllib.parse import urljoin
 from tqdm import tqdm
-
-
-# In[429]:
-
 
 ### Definitions
 
@@ -37,47 +27,33 @@ download_link_xpath = '/html/body/div/section/div/main/div[2]/aside/div[1]/ul/li
 title_xpath = '/html/body/div/section/div/main/div[2]/div/div/div[1]/div/div[1]/h1/span/text()'
 
 ## Replace with the desired destination folder
-destination_folder = '' #do not fill; used as failsafe
-destination_folder = 'C:/Users/tomc9/Dropbox/9.Programming/tech_var_2023/FRUS EPUB/Tag_Country_Russia/'
-
+destination_folder = '' # Note: filepath should use / not \
 
 ## DEBUG
 debug_mode = False
 
-
-# In[402]:
-
-
+# Function to download files
 def download_file(url, destination, destination_folder):
     full_path = os.path.join(destination_folder, destination)
     response = requests.get(url)
     with open(full_path, 'wb') as file:
         file.write(response.content)
 
-
-# In[403]:
-
-
+# Function to retrieve destination links from hub
 def get_links_from_hub(hub_url, links_xpath):
     response = requests.get(hub_url)
     tree = html.fromstring(response.content)
     links = tree.xpath(links_xpath)
     return [link for link in links if isinstance(link, str)]  # Ensure only strings (URLs) are returned
 
-
-# In[404]:
-
-
+# Function to retrieve download link
 def get_download_link(document_url, download_link_xpath):
     response = requests.get(document_url)
     tree = html.fromstring(response.content)
     download_links = tree.xpath(download_link_xpath)
     return download_links[0] if download_links else None
 
-
-# In[405]:
-
-
+# Function to identify document title and format it into filename
 def get_document_title(document_url, title_xpath):
     response = requests.get(document_url)
     tree = html.fromstring(response.content)
@@ -121,17 +97,11 @@ def get_document_title(document_url, title_xpath):
     
     return formatted_title
 
-
-# In[406]:
-
-
+# Function to check whether destination folder has certain files or not
 def get_downloaded_files(destination_folder):
     return {file for file in os.listdir(destination_folder) if os.path.isfile(os.path.join(destination_folder, file))}
 
-
-# In[425]:
-
-
+# Main function
 def main(hub_url, links_xpath, download_link_xpath, title_xpath, destination_folder, file_extension, start_year, end_year, test_mode=False):
     downloaded_files = get_downloaded_files(destination_folder)
     document_links = get_links_from_hub(hub_url, links_xpath)
@@ -179,10 +149,7 @@ def main(hub_url, links_xpath, download_link_xpath, title_xpath, destination_fol
             # Update progress bar
             pbar.update(1)
 
-
-# In[426]:
-
-
+# Test mode
 def test_crawler():
     main(hub_url,
          links_xpath,
@@ -194,10 +161,7 @@ def test_crawler():
          end_year,
          test_mode=True)
 
-
-# In[427]:
-
-
+# Real crawler
 def true_crawler():
      main(hub_url,
          links_xpath,
@@ -209,21 +173,8 @@ def true_crawler():
           end_year,
           test_mode=False)
 
-
-# In[428]:
-
-
+# Run
 true_crawler()
-
-
-# In[431]:
-
-
-
-
-
-# In[ ]:
-
 
 
 
