@@ -7,6 +7,10 @@ Current features:
 - Debug mode
 - Loading bar (crawler is slow, so this will show you if the process is hanging)
 
+&nbsp;
+
 Read.me under construction, will get around to it.
+
 Most instructions are coded as comments in the python file.
+
 Meanwhile, contact khyrst@korea.ac.kr for unresolved issues.
